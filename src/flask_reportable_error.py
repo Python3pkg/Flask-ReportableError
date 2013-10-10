@@ -1,6 +1,6 @@
 # coding: UTF-8
 # @copyright ©2013, Rodrigo Cacilhας <batalema@cacilhas.info>
-#                   Cesar Barros <cesar.barros@gmail.com>
+#                   Cesar Barros <cesarb@cesarb.eti.br>
 
 import sys
 from functools import wraps

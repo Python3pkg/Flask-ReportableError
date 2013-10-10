@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: UTF-8
 # @copyright ©2013, Rodrigo Cacilhας <batalema@cacilhas.info>
-#                   Cesar Barros <cesar.barros@gmail.com>
+#                   Cesar Barros <cesarb@cesarb.eti.br>
 
 import logging
 from unittest import main, TestCase
