@@ -1,0 +1,17 @@
+*.bak
+*.kpf
+*.pyc
+*.pyo
+*swo
+*swp
+*~
+.DS_Store
+.Python
+.cache
+.project
+/bin
+/distribute-*
+/include
+/lib
+/readline-*
+Icon?
