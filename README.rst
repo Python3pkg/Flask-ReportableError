@@ -5,7 +5,7 @@ Flask-ReportableError
 Introduction
 ------------
 
-Flask-ReportableError is an Flask extension for handling errors that can
+Flask-ReportableError is a Flask extension for handling errors that can
 be reported to the web client.
 
 
