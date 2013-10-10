@@ -4,7 +4,7 @@ from distutils.core import setup
 setup(
     name         = 'flask_reportable_error',
     version      = '0.1.0',
-    licence      = 'BSD',
+    license      = 'BSD',
     platforms    = 'any',
     py_modules   = ['flask_reportable_error'],
     author       = 'Rodrigo Cacilhας',
