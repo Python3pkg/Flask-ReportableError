@@ -55,4 +55,4 @@ dictionary with the following keys:
 
 - ``DEFAULT_STATUS_CODE``:
   the default numeric status code for reportable exception classes. By
-  default is 500.
+  default it’s 500.
