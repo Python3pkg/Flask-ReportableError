@@ -36,7 +36,8 @@ class TestInit(TestCase):
     def test_raises_on_none_app(self):
         # Reset flask_reportable_error
         flask_reportable_error.config.app = None
-        self.assertRaises(RuntimeError, lambda: flask_reportable_error.config.settings)
+        self.assertRaises(RuntimeError,
+                          lambda: flask_reportable_error.config.settings)
 
     def test_register_application(self):
         self.assertEqual(self.handler.__name__,
@@ -91,7 +92,6 @@ class TestInit(TestCase):
         self.assertEqual(report, s)
         self.assertEqual(status_code, 404)
         self.assertEqual(headers, {})
-
 
 
 class TestReportableErrorMixin(TestCase):
