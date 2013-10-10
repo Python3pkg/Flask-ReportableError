@@ -33,10 +33,15 @@ class TestInit(TestCase):
             flask_reportable_error.ReportableErrorMixin
         ]
 
+    def test_raises_on_none_app(self):
+        # Reset flask_reportable_error
+        flask_reportable_error.config.app = None
+        self.assertRaises(RuntimeError, lambda: flask_reportable_error.config.settings)
+
     def test_register_application(self):
         self.assertEqual(self.handler.__name__,
                          'reportable_error_handler')
-        self.assertEqual(flask_reportable_error.ReportableErrorMixin.app,
+        self.assertEqual(flask_reportable_error.config.app,
                          self.app)
 
     def test_handle_error_500(self):
