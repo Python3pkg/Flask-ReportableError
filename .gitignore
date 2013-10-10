@@ -14,4 +14,7 @@
 /include
 /lib
 /readline-*
+/src/MANIFEST
+/src/build
+/src/dist
 Icon?
