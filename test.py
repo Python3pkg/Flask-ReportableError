@@ -120,5 +120,19 @@ class TestReportableErrorMixin(TestCase):
         self.assertNotEqual(exc1, exc3)
 
 
+class TestAddMixins(TestCase):
+
+    def test_add_mixins(self):
+        class Mixin(object):
+            pass
+
+        flask_reportable_error.add_mixins(Mixin)
+        exc_class = flask_reportable_error.reportable(ValueError)
+        self.assertTrue(issubclass(exc_class, Mixin))
+        self.assertTrue(issubclass(exc_class, ValueError))
+        self.assertTrue(issubclass(exc_class,
+                                   flask_reportable_error.ReportableErrorMixin))
+
+
 if __name__ == '__main__':
     main()

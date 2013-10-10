@@ -4,11 +4,6 @@
 
 import sys
 from functools import wraps
-try:
-    from sqlalchemy.exc import DontWrapMixin
-except ImportError:
-    DontWrapMixin = object
-
 
 __all__ = ['init', 'ReportableErrorMixin', 'reportable']
 
@@ -17,18 +12,31 @@ def init(app):
     config.update(app)
 
 
+def add_mixins(*mixins):
+    config.add_mixins(*mixins)
+
+
+#-----------------------------------------------------------------------
+# settings object
+
 @apply
 class config(object):
 
     app = None
+    mixins = set()
 
     def update(self, app):
         self.app = app
+        self.add_mixins(ReportableErrorMixin)
 
         @app.errorhandler(ReportableErrorMixin)
         def reportable_error_handler(exc):
             app.logger.log(self.loglevel, '(%s) %s', type(exc).__name__, exc)
             return exc.report(), exc.status_code, {}
+
+    def add_mixins(self, *mixins):
+        for mixin in mixins:
+            self.mixins.add(mixin)
 
     @property
     def settings(self):
@@ -47,7 +55,10 @@ class config(object):
         return self.settings.get('DEFAULT_STATUS_CODE', 500)
 
 
-class ReportableErrorMixin(Exception, DontWrapMixin):
+#-----------------------------------------------------------------------
+# the mixin itself
+
+class ReportableErrorMixin(Exception):
 
     _status_code = None
 
@@ -68,6 +79,10 @@ class ReportableErrorMixin(Exception, DontWrapMixin):
     def status_code(self, value):
         self._status_code = value
 
+add_mixins(ReportableErrorMixin)
+
+#-----------------------------------------------------------------------
+# the factory
 
 def single_argument_memoize(f):
     memo = {}
@@ -84,11 +99,21 @@ def single_argument_memoize(f):
 
 @single_argument_memoize
 def reportable(exception):
-    if issubclass(exception, ReportableErrorMixin):
+    if all(issubclass(exception, mixin) for mixin in config.mixins):
         return exception
+    base = config.mixins.copy()
+    base.add(exception)
+    return type('Reportable{0.__name__}'.format(exception),
+                tuple(base), {})
 
-    return type(
-        'Reportable{0.__name__}'.format(exception),
-        (exception, ReportableErrorMixin),
-        {},
-    )
+
+#-----------------------------------------------------------------------
+# SQLAlchemy support
+
+try:
+    from sqlalchemy.exc import DontWrapMixin
+    add_mixins(DontWrapMixin)
+
+except ImportError:
+    # SQLAlchemy is not installed
+    pass
