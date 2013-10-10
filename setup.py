@@ -13,7 +13,7 @@ else:
 
 setup(
     name             = 'flask_reportable_error',
-    version          = '0.2.0',
+    version          = '0.2.1',
     license          = 'BSD',
     platforms        = 'any',
     url              = 'https://github.com/Montegasppa/Flask-ReportableError',
