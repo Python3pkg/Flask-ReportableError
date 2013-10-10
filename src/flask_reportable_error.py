@@ -1,6 +1,7 @@
 # coding: UTF-8
 # @copyright ©2013, Rodrigo Cacilhας <batalema@cacilhas.info>
 
+import sys
 from functools import wraps
 import logging
 try:
@@ -29,7 +30,10 @@ class ReportableErrorMixin(Exception, DontWrapMixin):
     _status_code = None
 
     def report(self):
-        return unicode(self)
+        if sys.version_info.major == 3:
+            return '{}'.format(self)
+        else:
+            return unicode(self)
 
     @property
     def status_code(self):
