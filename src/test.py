@@ -52,19 +52,19 @@ class TestInit(TestCase):
         exc = flask_reportable_error.ReportableErrorMixin(s)
         self.handler(exc)
         self.assertEqual(self.app.logged, [
-            (logging.DEBUG, '(%s) %s', 'ReportableErrorMixin', exc),
+            (logging.ERROR, '(%s) %s', 'ReportableErrorMixin', exc),
         ])
 
-    def test_log_deeper(self):
+    def test_inhibit_log(self):
         s = 'test reportable error'
         app = self.app
         app.config['REPORTABLE_ERROR'] = {
-            'LOGLEVEL': logging.ERROR,
+            'LOGLEVEL': logging.DEBUG,
         }
         exc = flask_reportable_error.ReportableErrorMixin(s)
         self.handler(exc)
         self.assertEqual(app.logged, [
-            (logging.ERROR, '(%s) %s', 'ReportableErrorMixin', exc),
+            (logging.DEBUG, '(%s) %s', 'ReportableErrorMixin', exc),
         ])
 
     def test_handle_error_400(self):

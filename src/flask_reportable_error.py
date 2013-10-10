@@ -20,7 +20,7 @@ def init(app):
     @app.errorhandler(ReportableErrorMixin)
     def reportable_error_handler(exc):
         config = app.config.get('REPORTABLE_ERROR', {})
-        loglevel = config.get('LOGLEVEL', logging.DEBUG)
+        loglevel = config.get('LOGLEVEL', logging.ERROR)
         app.logger.log(loglevel, '(%s) %s', type(exc).__name__, exc)
         return exc.report(), exc.status_code, {}
 
