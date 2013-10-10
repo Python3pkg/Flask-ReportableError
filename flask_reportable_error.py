@@ -4,7 +4,6 @@
 
 import sys
 from functools import wraps
-import logging
 try:
     from sqlalchemy.exc import DontWrapMixin
 except ImportError:
@@ -15,19 +14,41 @@ __all__ = ['init', 'ReportableErrorMixin', 'reportable']
 
 
 def init(app):
-    ReportableErrorMixin.app = app
+    config.update(app)
 
-    @app.errorhandler(ReportableErrorMixin)
-    def reportable_error_handler(exc):
-        config = app.config.get('REPORTABLE_ERROR', {})
-        loglevel = config.get('LOGLEVEL', logging.ERROR)
-        app.logger.log(loglevel, '(%s) %s', type(exc).__name__, exc)
-        return exc.report(), exc.status_code, {}
+
+@apply
+class config(object):
+
+    app = None
+
+    def update(self, app):
+        self.app = app
+
+        @app.errorhandler(ReportableErrorMixin)
+        def reportable_error_handler(exc):
+            app.logger.log(self.loglevel, '(%s) %s', type(exc).__name__, exc)
+            return exc.report(), exc.status_code, {}
+
+    @property
+    def settings(self):
+        app = self.app
+        if app is None:
+            raise RuntimeError('you must run init() before using flask_reportable_error')
+        return app.config.get('REPORTABLE_ERROR', {})
+
+    @property
+    def loglevel(self):
+        import logging
+        return self.settings.get('LOGLEVEL', logging.ERROR)
+
+    @property
+    def default_status_code(self):
+        return self.settings.get('DEFAULT_STATUS_CODE', 500)
 
 
 class ReportableErrorMixin(Exception, DontWrapMixin):
 
-    app = None
     _status_code = None
 
     def report(self):
@@ -39,8 +60,7 @@ class ReportableErrorMixin(Exception, DontWrapMixin):
     @property
     def status_code(self):
         if self._status_code is None:
-            config = self.app.config.get('REPORTABLE_ERROR', {})
-            return config.get('DEFAULT_STATUS_CODE', 500)
+            return config.default_status_code
         else:
             return self._status_code
 
