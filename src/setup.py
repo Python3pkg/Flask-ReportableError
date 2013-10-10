@@ -1,8 +1,5 @@
 # coding: UTF-8
-# @copyright ©2013, Rodrigo Cacilhας <batalema@cacilhas.info>
-
 from distutils.core import setup
-
 
 setup(
     name         = 'flask_reportable_error',
