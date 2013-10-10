@@ -1,19 +1,25 @@
 # coding: UTF-8
 from distutils.core import setup
+from os import path
+
+with open(path.join(path.dirname(__file__), 'README.rst')) as fd:
+    long_description = fd.read()
+
 
 setup(
-    name         = 'flask_reportable_error',
-    version      = '0.1.0',
-    license      = 'BSD',
-    platforms    = 'any',
-    py_modules   = ['flask_reportable_error'],
-    author       = 'Rodrigo Cacilhας',
-    author_email = 'batalema@cacilhas.info',
-    description  = 'handle errors that can be reported to the web client',
-    install_requires = [
-        'Flask>=0.10.1',
-    ],
-    classifiers = [
+    name             = 'flask_reportable_error',
+    version          = '0.1.0',
+    license          = 'BSD',
+    platforms        = 'any',
+    url              = 'https://github.com/Montegasppa/Flask-ReportableError',
+    download_url     = 'https://github.com/Montegasppa/Flask-ReportableError/archive/master.zip',
+    py_modules       = ['flask_reportable_error'],
+    author           = 'Rodrigo Cacilhας',
+    author_email     = 'batalema@cacilhas.info',
+    description      = 'handle errors that can be reported to the web client',
+    long_description = long_description,
+    install_requires = ['Flask>=0.10.1'],
+    classifiers      = [
         'Environment :: Web Environment',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
