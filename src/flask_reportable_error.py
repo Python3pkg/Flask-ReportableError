@@ -32,7 +32,7 @@ class ReportableErrorMixin(Exception, DontWrapMixin):
 
     def report(self):
         if sys.version_info.major == 3:
-            return '{}'.format(self)
+            return str(self)
         else:
             return unicode(self)
 
