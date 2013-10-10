@@ -12,7 +12,7 @@ else:
 
 
 setup(
-    name             = 'flask_reportable_error',
+    name             = 'Flask-ReportableError',
     version          = '0.2.1',
     license          = 'BSD',
     platforms        = 'any',
