@@ -17,7 +17,7 @@ setup(
     license          = 'BSD',
     platforms        = 'any',
     url              = 'https://github.com/Montegasppa/Flask-ReportableError',
-    download_url     = 'https://github.com/Montegasppa/Flask-ReportableError/archive/master.zip',
+    download_url     = 'https://github.com/Montegasppa/Flask-ReportableError/archive/next_release.zip',
     py_modules       = ['flask_reportable_error'],
     author           = 'Rodrigo Cacilhας',
     author_email     = 'batalema@cacilhas.info',
