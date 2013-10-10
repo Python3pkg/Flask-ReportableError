@@ -2,7 +2,7 @@
 from distutils.core import setup
 from os import path
 
-readme = path.join(path.dirname(__file__), 'README.rst')
+readme = path.join(path.dirname(__file__), 'README')
 if path.exists(readme):
     with open(readme) as fd:
         long_description = fd.read()
