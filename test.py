@@ -33,6 +33,12 @@ class TestInit(TestCase):
             flask_reportable_error.ReportableErrorMixin
         ]
 
+    def test_custom_headers(self):
+        exc = flask_reportable_error.reportable(ValueError)('some value error')
+        exc.headers = { 'Content-Type': 'plain/text' }
+        report, status_code, headers = self.handler(exc)
+        self.assertEqual(headers, { 'Content-Type': 'plain/text' })
+
     def test_raises_on_none_app(self):
         # Reset flask_reportable_error
         flask_reportable_error.config.app = None

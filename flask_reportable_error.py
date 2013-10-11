@@ -28,7 +28,8 @@ class config(object):
         @app.errorhandler(ReportableErrorMixin)
         def reportable_error_handler(exc):
             app.logger.log(self.loglevel, '(%s) %s', type(exc).__name__, exc)
-            return exc.report(), exc.status_code, {}
+            headers = getattr(exc, 'headers', {})
+            return exc.report(), exc.status_code, headers
 
     @property
     def settings(self):
