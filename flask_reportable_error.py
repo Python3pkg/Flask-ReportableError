@@ -87,7 +87,6 @@ class ReportableErrorMixin(Exception):
     def status_code(self, value):
         self._status_code = value
 
-add_mixins(ReportableErrorMixin)
 
 #-----------------------------------------------------------------------
 # the factory
@@ -107,9 +106,10 @@ def single_argument_memoize(f):
 
 @single_argument_memoize
 def reportable(exception):
+    base = config.mixins.copy()
+    base.add(ReportableErrorMixin)
     if all(issubclass(exception, mixin) for mixin in config.mixins):
         return exception
-    base = config.mixins.copy()
     base.add(exception)
     return type('Reportable{0.__name__}'.format(exception),
                 tuple(base), {})

@@ -110,6 +110,14 @@ class TestInit(TestCase):
         self.assertEqual(status_code, 404)
         self.assertEqual(headers, {})
 
+    def test_cannot_unset_mixin(self):
+        # Reset mixins
+        flask_reportable_error.config.mixins = set()
+        exc = flask_reportable_error.reportable(ValueError)
+        self.assertTrue(issubclass(exc, ValueError))
+        self.assertTrue(issubclass(exc,
+                                   flask_reportable_error.ReportableErrorMixin))
+
 
 class TestReportableErrorMixin(TestCase):
 
