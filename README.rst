@@ -23,6 +23,11 @@ statement in you application start script::
     flask_reportable_error.init(app)
 
 
+As alternative second parameter to ``init()``, one can supply a string
+representing the template name to render the report. The context to
+template contains the exception as value to the ``exc`` key.
+
+
 API
 ---
 
@@ -41,6 +46,10 @@ API
   - ``status_code``:
     property representing the numeric status code – can be set at
     instance level.
+
+  - ``headers``:
+    the reportable exception classes or instances may have an attribute
+    ``headers``, containing the custom headers.
 
 
 Settings
