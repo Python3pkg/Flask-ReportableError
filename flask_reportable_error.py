@@ -4,12 +4,14 @@
 
 import sys
 from functools import wraps
+from flask import render_template
 
 __all__ = ['init', 'ReportableErrorMixin', 'reportable']
 
 
-def init(app):
+def init(app, template=None):
     config.update(app)
+    config.template = template
 
 
 def add_mixins(*mixins):
@@ -32,7 +34,13 @@ class config(object):
         @app.errorhandler(ReportableErrorMixin)
         def reportable_error_handler(exc):
             app.logger.log(self.loglevel, '(%s) %s', type(exc).__name__, exc)
-            return exc.report(), exc.status_code, {}
+
+            template = self.template
+            body = render_template(template, { 'exc': exc }) if template \
+              else exc.report()
+
+            headers = getattr(exc, 'headers', {})
+            return body, exc.status_code, headers
 
     def add_mixins(self, *mixins):
         for mixin in mixins:
