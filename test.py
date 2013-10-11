@@ -5,6 +5,7 @@
 
 import logging
 from unittest import main, TestCase
+from mock import patch
 import flask_reportable_error
 
 
@@ -32,6 +33,16 @@ class TestInit(TestCase):
         self.handler = app.handlers[
             flask_reportable_error.ReportableErrorMixin
         ]
+
+    @patch.object(flask_reportable_error, 'render_template')
+    def test_handle_template(self, render_template):
+        app = self.app
+        flask_reportable_error.init(app, 'application/error.html')
+        exc = flask_reportable_error.reportable(ValueError)('some value error')
+        body, status_code, headers = self.handler(exc)
+        render_template.assert_called_once_with(
+            'application/error.html', { 'exc': exc })
+        self.assertEqual(body, render_template.return_value)
 
     def test_raises_on_none_app(self):
         # Reset flask_reportable_error
