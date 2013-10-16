@@ -23,15 +23,24 @@ statement in you application start script::
     flask_reportable_error.init(app)
 
 
-As alternative second parameter to ``init()``, one can supply a string
-representing the template name to render the report. The context to
-template contains the exception as value to the ``exc`` key.
-
-
 API
 ---
 
-- ``flask_reportable_error.reportable``:
+- ``flask_reportable_error.init()``:
+  context initializer, it must receive the application as parameter.
+
+
+- ``flask_reportable_error.add_mixins()``:
+  function that receives mixins to be mixed with the reportable
+  exception.
+
+
+- ``flask_reportable_error.mixin``:
+  class decorator that declares the decorated class as mixin with
+  reportable exceptions.
+
+
+- ``flask_reportable_error.reportable()``:
   factory to create reportable exception classes. For example::
 
     raise reportable(ValueError)('invalid data received')
@@ -65,3 +74,7 @@ dictionary with the following keys:
 - ``DEFAULT_STATUS_CODE``:
   the default numeric status code for reportable exception classes. By
   default it’s 500.
+
+- ``TEMPLATE``:
+  a template name to be used instead of default. The context to template
+  will contain the exception as value to the ``exc`` key.

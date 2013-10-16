@@ -4,6 +4,7 @@
 
 import sys
 from functools import wraps
+from warnings import warn
 from flask import render_template
 
 __all__ = ['init', 'ReportableErrorMixin', 'reportable']
@@ -11,11 +12,19 @@ __all__ = ['init', 'ReportableErrorMixin', 'reportable']
 
 def init(app, template=None):
     config.update(app)
-    config.template = template
+    if template:
+        warn('template as parameter is deprecated, use settings instead', DeprecationWarning)
+    config.template = template or config.settings.get('TEMPLATE')
 
 
 def add_mixins(*mixins):
     config.add_mixins(*mixins)
+
+
+def mixin(the_mixin):
+    """class decorator"""
+    config.add_mixins(the_mixin)
+    return the_mixin
 
 
 #-----------------------------------------------------------------------
