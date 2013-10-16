@@ -47,7 +47,7 @@ class TestInit(TestCase):
         exc = flask_reportable_error.reportable(ValueError)('some value error')
         body, status_code, headers = self.handler(exc)
         render_template.assert_called_once_with(
-            'application/error.html', { 'exc': exc })
+            'application/error.html', exc=exc)
         self.assertEqual(body, render_template.return_value)
 
     def test_raises_on_none_app(self):

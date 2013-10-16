@@ -36,7 +36,7 @@ class config(object):
             app.logger.log(self.loglevel, '(%s) %s', type(exc).__name__, exc)
 
             template = self.template
-            body = render_template(template, { 'exc': exc }) if template \
+            body = render_template(template, exc=exc) if template \
               else exc.report()
 
             headers = getattr(exc, 'headers', {})
