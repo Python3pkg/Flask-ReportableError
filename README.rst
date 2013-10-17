@@ -30,11 +30,6 @@ API
   context initializer, it must receive the application as parameter.
 
 
-- ``flask_reportable_error.add_mixins()``:
-  function that receives mixins to be mixed with the reportable
-  exception.
-
-
 - ``flask_reportable_error.mixin``:
   class decorator that declares the decorated class as mixin with
   reportable exceptions.
@@ -56,9 +51,11 @@ API
     property representing the numeric status code – can be set at
     instance level.
 
+  - ``template``:
+    attribute refering to custom template name.
+
   - ``headers``:
-    the reportable exception classes or instances may have an attribute
-    ``headers``, containing the custom headers.
+    attribute refering to custom headers.
 
 
 Settings
@@ -76,5 +73,8 @@ dictionary with the following keys:
   default it’s 500.
 
 - ``TEMPLATE``:
-  a template name to be used instead of default. The context to template
-  will contain the exception as value to the ``exc`` key.
+  the name of a template to be used instead of none. The context of the
+  template will contain the exception as value of the ``exc`` key.
+
+- ``HEADERS``:
+  a dictionary to be used as default headers instead of ``{}``.

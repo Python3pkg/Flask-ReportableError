@@ -10,14 +10,14 @@ from flask import render_template
 __all__ = ['init', 'ReportableErrorMixin', 'reportable']
 
 
-def init(app, template=None):
+def init(app):
     config.update(app)
-    if template:
-        warn('template as parameter is deprecated, use settings instead', DeprecationWarning)
-    config.template = template or config.settings.get('TEMPLATE')
+    config.template = config.settings.get('TEMPLATE')
+    config.headers = config.settings.get('HEADERS')
 
 
 def add_mixins(*mixins):
+    warn('use @mixin', DeprecationWarning)
     config.add_mixins(*mixins)
 
 
@@ -44,11 +44,11 @@ class config(object):
         def reportable_error_handler(exc):
             app.logger.log(self.loglevel, '(%s) %s', type(exc).__name__, exc)
 
-            template = self.template
+            template = getattr(exc, 'template', None) or self.template
             body = render_template(template, exc=exc) if template \
               else exc.report()
 
-            headers = getattr(exc, 'headers', {})
+            headers = getattr(exc, 'headers', None) or self.headers or {}
             return body, exc.status_code, headers
 
     def add_mixins(self, *mixins):

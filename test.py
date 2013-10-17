@@ -34,17 +34,55 @@ class TestInit(TestCase):
             flask_reportable_error.ReportableErrorMixin
         ]
 
-    def test_custom_headers(self):
+    def test_handle_default_headers(self):
+        app = self.app
+        app.config = {
+            'REPORTABLE_ERROR': {
+                'HEADERS': { 'Content-Type': 'plain/text' },
+            },
+        }
+        flask_reportable_error.init(app)
         exc = flask_reportable_error.reportable(ValueError)('some value error')
-        exc.headers = { 'Content-Type': 'plain/text' }
+        report, status_code, headers = self.handler(exc)
+        self.assertEqual(headers, { 'Content-Type': 'plain/text' })
+
+    def test_custom_headers(self):
+        class ExceptionWithHeaders(ValueError):
+            headers = { 'Content-Type': 'plain/text' }
+
+        exc = flask_reportable_error.reportable(ExceptionWithHeaders)('some value error')
         report, status_code, headers = self.handler(exc)
         self.assertEqual(headers, { 'Content-Type': 'plain/text' })
 
     @patch.object(flask_reportable_error, 'render_template')
     def test_handle_template(self, render_template):
         app = self.app
-        flask_reportable_error.init(app, 'application/error.html')
+        app.config = {
+            'REPORTABLE_ERROR': {
+                'TEMPLATE': 'application/error.html',
+            },
+        }
+        flask_reportable_error.init(app)
         exc = flask_reportable_error.reportable(ValueError)('some value error')
+        body, status_code, headers = self.handler(exc)
+        render_template.assert_called_once_with(
+            'application/error.html', exc=exc)
+        self.assertEqual(body, render_template.return_value)
+
+    @patch.object(flask_reportable_error, 'render_template')
+    def test_custom_template(self, render_template):
+        app = self.app
+        app.config = {
+            'REPORTABLE_ERROR': {
+                'TEMPLATE': 'application/error.html'
+            }
+        }
+
+        class ExceptionWithTemplate(ValueError):
+            template = 'application/error.html'
+
+        flask_reportable_error.init(app)
+        exc = flask_reportable_error.reportable(ExceptionWithTemplate)('some value error')
         body, status_code, headers = self.handler(exc)
         render_template.assert_called_once_with(
             'application/error.html', exc=exc)
@@ -147,14 +185,31 @@ class TestReportableErrorMixin(TestCase):
 
 class TestAddMixins(TestCase):
 
+    def test_mixin_decorator(self):
+        @flask_reportable_error.mixin
+        class Mixin(object):
+            pass
+
+        class SomeError1(ValueError):
+            pass
+
+        exc_class = flask_reportable_error.reportable(SomeError1)
+        self.assertTrue(issubclass(exc_class, Mixin))
+        self.assertTrue(issubclass(exc_class, SomeError1))
+        self.assertTrue(issubclass(exc_class,
+                                   flask_reportable_error.ReportableErrorMixin))
+
     def test_add_mixins(self):
         class Mixin(object):
             pass
 
+        class SomeError2(ValueError):
+            pass
+
         flask_reportable_error.add_mixins(Mixin)
-        exc_class = flask_reportable_error.reportable(ValueError)
+        exc_class = flask_reportable_error.reportable(SomeError2)
         self.assertTrue(issubclass(exc_class, Mixin))
-        self.assertTrue(issubclass(exc_class, ValueError))
+        self.assertTrue(issubclass(exc_class, SomeError2))
         self.assertTrue(issubclass(exc_class,
                                    flask_reportable_error.ReportableErrorMixin))
 
