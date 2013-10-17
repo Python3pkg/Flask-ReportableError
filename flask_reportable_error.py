@@ -117,7 +117,7 @@ def single_argument_memoize(f):
 def reportable(exception):
     base = config.mixins.copy()
     base.add(ReportableErrorMixin)
-    if all(issubclass(exception, mixin) for mixin in config.mixins):
+    if all(issubclass(exception, a_mixin) for a_mixin in base):
         return exception
     base.add(exception)
     return type('Reportable{0.__name__}'.format(exception),
