@@ -17,7 +17,7 @@ def init(app):
 
 
 def add_mixins(*mixins):
-    warn('use @mixin', DeprecationWarning)
+    warn('use @mixin', DeprecationWarning, 2)
     config.add_mixins(*mixins)
 
 
@@ -129,7 +129,7 @@ def reportable(exception):
 
 try:
     from sqlalchemy.exc import DontWrapMixin
-    add_mixins(DontWrapMixin)
+    config.add_mixins(DontWrapMixin)
 
 except ImportError:
     # SQLAlchemy is not installed
