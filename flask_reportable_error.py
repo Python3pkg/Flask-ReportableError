@@ -42,7 +42,7 @@ class config(object):
 
         @app.errorhandler(ReportableErrorMixin)
         def reportable_error_handler(exc):
-            app.logger.log(self.loglevel, '(%s) %s', type(exc).__name__, exc)
+            app.logger.log(self.loglevel, '(%s) %s', exc.type_name, exc)
 
             template = getattr(exc, 'template', None) or self.template
             body = render_template(template, exc=exc) if template \
@@ -78,6 +78,7 @@ class config(object):
 class ReportableErrorMixin(Exception):
 
     _status_code = None
+    type_name = 'ReportableErrorMixin'
 
     def report(self):
         if sys.version_info.major == 3:
@@ -120,8 +121,11 @@ def reportable(exception):
     if all(issubclass(exception, a_mixin) for a_mixin in base):
         return exception
     base.add(exception)
-    return type('Reportable{0.__name__}'.format(exception),
-                tuple(base), {})
+    return type(
+        'Reportable{0.__name__}'.format(exception),
+        tuple(base),
+        { 'type_name': exception.__name__ },
+    )
 
 
 #-----------------------------------------------------------------------

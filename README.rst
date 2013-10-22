@@ -57,6 +57,10 @@ API
   - ``headers``:
     attribute refering to custom headers.
 
+  - ``type_name``:
+    attribute set by ``reportable()`` on inheritance, with the name of
+    the original exception class.
+
 
 Settings
 --------

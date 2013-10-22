@@ -164,6 +164,10 @@ class TestReportableErrorMixin(TestCase):
         exc = flask_reportable_error.ReportableErrorMixin(s)
         self.assertEqual(exc.report(), s)
 
+    def test_reportable_type_name(self):
+        exc_class = flask_reportable_error.reportable(ValueError)
+        self.assertEqual(exc_class.type_name, 'ValueError')
+
     def test_reportable_factory_return_reportable_error(self):
         exc_class = flask_reportable_error.reportable(ValueError)
         self.assertTrue(issubclass(exc_class,
