@@ -113,7 +113,7 @@ class TestInit(TestCase):
         exc = flask_reportable_error.ReportableErrorMixin(s)
         self.handler(exc)
         self.assertEqual(self.app.logged, [
-            (logging.ERROR, '(%s) %s', 'ReportableErrorMixin', exc),
+            (logging.ERROR, '(reported %s) %s', 'ReportableErrorMixin', exc),
         ])
 
     def test_inhibit_log(self):
@@ -125,7 +125,7 @@ class TestInit(TestCase):
         exc = flask_reportable_error.ReportableErrorMixin(s)
         self.handler(exc)
         self.assertEqual(app.logged, [
-            (logging.DEBUG, '(%s) %s', 'ReportableErrorMixin', exc),
+            (logging.DEBUG, '(reported %s) %s', 'ReportableErrorMixin', exc),
         ])
 
     def test_handle_error_400(self):

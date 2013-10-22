@@ -42,7 +42,7 @@ class config(object):
 
         @app.errorhandler(ReportableErrorMixin)
         def reportable_error_handler(exc):
-            app.logger.log(self.loglevel, '(%s) %s', exc.type_name, exc)
+            app.logger.log(self.loglevel, '(reported %s) %s', exc.type_name, exc)
 
             template = getattr(exc, 'template', None) or self.template
             body = render_template(template, exc=exc) if template \
