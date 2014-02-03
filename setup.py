@@ -13,7 +13,7 @@ else:
 
 setup(
     name             = 'Flask-ReportableError',
-    version          = '0.4.2',
+    version          = '0.4.3',
     license          = 'BSD',
     platforms        = 'any',
     url              = 'https://github.com/Montegasppa/Flask-ReportableError',
