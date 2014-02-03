@@ -5,7 +5,10 @@
 
 import logging
 from unittest import main, TestCase
-from mock import patch
+try:
+    from unittest.mock import patch
+except ImportError:
+    from mock import patch
 import flask_reportable_error
 
 

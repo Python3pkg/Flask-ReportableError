@@ -30,7 +30,6 @@ def mixin(the_mixin):
 #-----------------------------------------------------------------------
 # settings object
 
-@apply
 class config(object):
 
     app = None
@@ -70,6 +69,8 @@ class config(object):
     @property
     def default_status_code(self):
         return self.settings.get('DEFAULT_STATUS_CODE', 500)
+
+config = config()
 
 
 #-----------------------------------------------------------------------
