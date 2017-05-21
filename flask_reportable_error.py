@@ -85,7 +85,7 @@ class ReportableErrorMixin(Exception):
         if sys.version_info.major == 3:
             return str(self)
         else:
-            return unicode(self)
+            return str(self)
 
     @property
     def status_code(self):
